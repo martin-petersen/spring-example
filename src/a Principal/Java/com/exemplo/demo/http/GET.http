@@ -1,0 +1,17 @@
+###LISTA TUDO
+GET http://localhost:8080/pessoa
+
+###LISTA POR IDADE
+GET http://localhost:8080/pessoa?idade=20
+
+###LISTA POR NATURALIDADE
+GET http://localhost:8080/pessoa?naturalidade=sc
+
+###LISTA POR NOME
+GET http://localhost:8080/pessoa?nome=maria
+
+###LISTA POR DATA DE NASCIMENTO INFERIOR
+GET http://localhost:8080/pessoa?antes=2005-05-16
+
+###LISTA POR DATA DE NASCIMENTO SUPERIOR
+GET http://localhost:8080/pessoa?depois=2000-03-10
