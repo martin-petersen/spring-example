@@ -1,0 +1,9 @@
+PUT http://localhost:8081/pessoa/6
+content-type: application/json
+
+{
+  "nome": "Maria Fernanda Lima",
+  "estado": "mg",
+  "idade": 19,
+  "dataNascimento": "2001-08-13"
+}

@@ -1,0 +1,69 @@
+POST http://localhost:8081/pessoa
+content-type: application/json
+
+{
+  "nome": "Maria Luiza",
+  "estado": "rs",
+  "idade": 20,
+  "dataNascimento": "2000-10-01"
+}
+
+###
+
+POST http://localhost:8081/pessoa
+content-type: application/json
+
+{
+  "nome": "Ana Laura",
+  "estado": "rn",
+  "idade": 20,
+  "dataNascimento": "2000-01-01"
+}
+
+###
+
+POST http://localhost:8081/pessoa
+content-type: application/json
+
+{
+  "nome": "Noah",
+  "estado": "rj",
+  "idade": 25,
+  "dataNascimento": "1995-01-01"
+}
+
+###
+
+POST http://localhost:8081/pessoa
+content-type: application/json
+
+{
+  "nome": "Catarina",
+  "estado": "sc",
+  "idade": 22,
+  "dataNascimento": "1998-08-13"
+}
+
+###
+
+POST http://localhost:8081/pessoa
+content-type: application/json
+
+{
+  "nome": "João Gabriel",
+  "estado": "es",
+  "idade": 25,
+  "dataNascimento": "1995-08-13"
+}
+
+###
+
+POST http://localhost:8081/pessoa
+content-type: application/json
+
+{
+  "nome": "Maria Fernanda",
+  "estado": "sc",
+  "idade": 19,
+  "dataNascimento": "2001-08-13"
+}

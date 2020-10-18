@@ -14,8 +14,18 @@ public class Pessoa {
     private Long id;
     private String nome;
     private LocalDate dataNascimento;
-    private String naturalidade;
+    private String estado;
     private int idade;
+
+    public Pessoa() {
+    }
+
+    public Pessoa(Pessoa pessoa) {
+        this.nome = pessoa.getNome().toUpperCase();
+        this.dataNascimento = pessoa.dataNascimento;
+        this.estado = pessoa.getEstado().toUpperCase();
+        this.idade = pessoa.getIdade();
+    }
 
     public Long getId() {
         return id;
@@ -41,12 +51,12 @@ public class Pessoa {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getNaturalidade() {
-        return naturalidade;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setNaturalidade(String naturalidade) {
-        this.naturalidade = naturalidade;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public int getIdade() {
