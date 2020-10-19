@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.PessoaDTO;
+import com.example.demo.form.PessoaFORM;
 import com.example.demo.model.Pessoa;
 import com.example.demo.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
@@ -25,14 +29,14 @@ public class PessoaService {
     * repository mas fica de aprendizado.
     */
     @Transactional
-    public Pessoa save(Pessoa pessoa) {
+    public Pessoa save(PessoaFORM pessoa) {
         Pessoa novaPessoa = new Pessoa(pessoa);
         pessoaRepository.save(novaPessoa);
         return novaPessoa;
     }
 
     @Transactional
-    public Pessoa update(Long id, Pessoa pessoa) {
+    public Pessoa update(Long id, PessoaFORM pessoa) {
         if(pessoaRepository.findById(id).isPresent()) {
             Pessoa attPessoa = pessoaRepository.findById(id).get();
             attPessoa.setNome(pessoa.getNome().toUpperCase());
@@ -53,31 +57,44 @@ public class PessoaService {
         }
     }
 
-    public List<Pessoa> findByNome(String nome) {
-        return pessoaRepository.findByNome(nome.toUpperCase());
+    public List<PessoaDTO> findByNome(String nome) {
+        return conversorEntidadeParaDTO(pessoaRepository.findByNome(nome.toUpperCase()));
     }
 
-    public List<Pessoa> findByUF(String naturalidade) {
-        return pessoaRepository.findByEstado(naturalidade.toUpperCase());
+    public List<PessoaDTO> findByUF(String naturalidade) {
+        return conversorEntidadeParaDTO(pessoaRepository.findByEstado(naturalidade.toUpperCase()));
     }
 
-    public List<Pessoa> findByDataNascimentoAfter(String dataNascimento) {
+    public List<PessoaDTO> findByDataNascimentoAfter(String dataNascimento) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(dataNascimento,formatter);
-        return pessoaRepository.findByDataNascimentoAfter(localDate);
+        return conversorEntidadeParaDTO(pessoaRepository.findByDataNascimentoAfter(localDate));
     }
 
-    public List<Pessoa> findByDataNascimentoBefore(String dataNascimento) {
+    public List<PessoaDTO> findByDataNascimentoBefore(String dataNascimento) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(dataNascimento,formatter);
-        return pessoaRepository.findByDataNascimentoBefore(localDate);
+        return conversorEntidadeParaDTO(pessoaRepository.findByDataNascimentoBefore(localDate));
     }
 
-    public List<Pessoa> findByIdade(int idade) {
-        return pessoaRepository.findByIdade(idade);
+    public List<PessoaDTO> findByIdade(int idade) {
+        return conversorEntidadeParaDTO(pessoaRepository.findByIdade(idade));
     }
 
-    public List<Pessoa> findAll() {
-        return pessoaRepository.findAll();
+    public List<PessoaDTO> findAll() {
+        return conversorEntidadeParaDTO(pessoaRepository.findAll());
+    }
+
+    /*
+     * Nosso método com função de converter as listas de objetos, criado utilizando
+     * streams presente a partir do Java 8, mas se não tiver domínio podem utilizar
+     * for ou foreach sem qualquer prejuízo.
+     */
+
+    private List<PessoaDTO> conversorEntidadeParaDTO(List<Pessoa> pessoas) {
+        List<PessoaDTO> pessoasDTO = new ArrayList<>();
+        pessoasDTO = pessoas.stream().map(pessoa -> new PessoaDTO(pessoa.getId(),
+                pessoa.getNome(),pessoa.getEstado(),pessoa.getDateCeated())).collect(Collectors.toList());
+        return pessoasDTO;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PessoaDTO;
+import com.example.demo.form.PessoaFORM;
 import com.example.demo.model.Pessoa;
 import com.example.demo.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,11 +24,11 @@ public class PessoaController {
     * Essa notação indica que esse método vai ser chamado em requisições GET
     */
     @GetMapping
-    public ResponseEntity<List<Pessoa>> listagemPessoas(@RequestParam(required = false)String nome,
-                                                        @RequestParam(required = false)String uf,
-                                                        @RequestParam(required = false)String depois,
-                                                        @RequestParam(required = false)String antes,
-                                                        @RequestParam(required = false)Integer idade) {
+    public ResponseEntity<List<PessoaDTO>> listagemPessoas(@RequestParam(required = false)String nome,
+                                                           @RequestParam(required = false)String uf,
+                                                           @RequestParam(required = false)String depois,
+                                                           @RequestParam(required = false)String antes,
+                                                           @RequestParam(required = false)Integer idade) {
         if(nome!=null) {
             return ResponseEntity.ok(pessoaService.findByNome(nome.toUpperCase()));
         } else if(uf!=null) {
@@ -33,11 +36,9 @@ public class PessoaController {
         } else if(idade!=null) {
             return ResponseEntity.ok(pessoaService.findByIdade(idade));
         } else if(depois!=null) {
-            List<Pessoa> pessoas = pessoaService.findByDataNascimentoAfter(depois);
-            return ResponseEntity.ok(pessoas);
+            return ResponseEntity.ok(pessoaService.findByDataNascimentoAfter(depois));
         } else if(antes!=null) {
-            List<Pessoa> pessoas = pessoaService.findByDataNascimentoBefore(antes);
-            return ResponseEntity.ok(pessoas);
+            return ResponseEntity.ok(pessoaService.findByDataNascimentoBefore(antes));
         } else {
             return ResponseEntity.ok(pessoaService.findAll());
         }
@@ -47,7 +48,7 @@ public class PessoaController {
      * Essa notação indica que esse método vai ser chamado em requisições POST
      */
     @PostMapping
-    public ResponseEntity<Pessoa> salvar(@RequestBody Pessoa p,
+    public ResponseEntity<Pessoa> salvar(@Valid @RequestBody PessoaFORM p,
                                          UriComponentsBuilder uriComponentsBuilder) {
         try {
             Pessoa pessoa = pessoaService.save(p);
@@ -69,7 +70,7 @@ public class PessoaController {
      */
     @PutMapping("{id}")
     public ResponseEntity<Pessoa> atualizar(@PathVariable Long id,
-                                            @RequestBody Pessoa p) {
+                                            @Valid @RequestBody PessoaFORM p) {
         try {
             Pessoa pessoa = pessoaService.update(id, p);
             return ResponseEntity.ok(pessoa);

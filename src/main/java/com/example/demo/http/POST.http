@@ -67,3 +67,15 @@ content-type: application/json
   "idade": 19,
   "dataNascimento": "2001-08-13"
 }
+
+###
+
+POST http://localhost:8080/pessoa
+content-type: application/json
+
+{
+  "nome": "",
+  "estado": "",
+  "idade": 10,
+  "dataNascimento": "2020-08-13"
+}

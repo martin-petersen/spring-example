@@ -1,30 +1,42 @@
 package com.example.demo.model;
 
 
+import com.example.demo.form.PessoaFORM;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank
     private String nome;
     private LocalDate dataNascimento;
+    @NotBlank
     private String estado;
     private int idade;
+    @NotNull
+    private LocalDateTime dateCeated;
 
     public Pessoa() {
     }
-
-    public Pessoa(Pessoa pessoa) {
+    /*
+     * Lembrando de ajustar o construtor para iniciar o nosso novo parâmetro, já que ele nunca pode ser nulo
+     */
+    public Pessoa(PessoaFORM pessoa) {
         this.nome = pessoa.getNome().toUpperCase();
-        this.dataNascimento = pessoa.dataNascimento;
+        this.dataNascimento = pessoa.getDataNascimento();
         this.estado = pessoa.getEstado().toUpperCase();
         this.idade = pessoa.getIdade();
+        this.dateCeated = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -65,6 +77,14 @@ public class Pessoa {
 
     public void setIdade(int idade) {
         this.idade = idade;
+    }
+
+    public LocalDateTime getDateCeated() {
+        return dateCeated;
+    }
+
+    public void setDateCeated(LocalDateTime dateCeated) {
+        this.dateCeated = dateCeated;
     }
 }
 
