@@ -1,54 +1,29 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Pessoa;
-
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 public class PessoaDTO {
-    private Long id;
+    @NotBlank(message = "Nome não pode ser vazio")
     private String nome;
+    private LocalDate dataNascimento;
+    @NotBlank(message = "UF não pode ser vazio")
     private String estado;
-    private LocalDateTime dateCreated;
-
-    public PessoaDTO() {
-    }
-
-    public PessoaDTO(Long id, String nome, String estado, LocalDateTime dateCreated) {
-        this.id = id;
-        this.nome = nome;
-        this.estado = estado;
-        this.dateCreated = dateCreated;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private int idade;
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
     public String getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
+    public int getIdade() {
+        return idade;
     }
 }

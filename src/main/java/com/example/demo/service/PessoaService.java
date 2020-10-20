@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.PessoaResponseResponseDTO;
 import com.example.demo.dto.PessoaDTO;
-import com.example.demo.form.PessoaFORM;
 import com.example.demo.model.Pessoa;
 import com.example.demo.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,14 @@ public class PessoaService {
     * repository mas fica de aprendizado.
     */
     @Transactional
-    public Pessoa save(PessoaFORM pessoa) {
+    public PessoaResponseResponseDTO save(PessoaDTO pessoa) {
         Pessoa novaPessoa = new Pessoa(pessoa);
         pessoaRepository.save(novaPessoa);
-        return novaPessoa;
+        return new PessoaResponseResponseDTO(novaPessoa.getId(),novaPessoa.getNome(),novaPessoa.getEstado(),novaPessoa.getDateCeated());
     }
 
     @Transactional
-    public Pessoa update(Long id, PessoaFORM pessoa) {
+    public PessoaResponseResponseDTO update(Long id, PessoaDTO pessoa) {
         if(pessoaRepository.findById(id).isPresent()) {
             Pessoa attPessoa = pessoaRepository.findById(id).get();
             attPessoa.setNome(pessoa.getNome().toUpperCase());
@@ -44,7 +44,7 @@ public class PessoaService {
             attPessoa.setDataNascimento(pessoa.getDataNascimento());
             attPessoa.setIdade(pessoa.getIdade());
             pessoaRepository.save(attPessoa);
-            return attPessoa;
+            return new PessoaResponseResponseDTO(attPessoa.getId(),attPessoa.getNome(),attPessoa.getEstado(),attPessoa.getDateCeated());
         } else {
             return null;
         }
@@ -57,31 +57,31 @@ public class PessoaService {
         }
     }
 
-    public List<PessoaDTO> findByNome(String nome) {
+    public List<PessoaResponseResponseDTO> findByNome(String nome) {
         return conversorEntidadeParaDTO(pessoaRepository.findByNome(nome.toUpperCase()));
     }
 
-    public List<PessoaDTO> findByUF(String naturalidade) {
+    public List<PessoaResponseResponseDTO> findByUF(String naturalidade) {
         return conversorEntidadeParaDTO(pessoaRepository.findByEstado(naturalidade.toUpperCase()));
     }
 
-    public List<PessoaDTO> findByDataNascimentoAfter(String dataNascimento) {
+    public List<PessoaResponseResponseDTO> findByDataNascimentoAfter(String dataNascimento) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(dataNascimento,formatter);
         return conversorEntidadeParaDTO(pessoaRepository.findByDataNascimentoAfter(localDate));
     }
 
-    public List<PessoaDTO> findByDataNascimentoBefore(String dataNascimento) {
+    public List<PessoaResponseResponseDTO> findByDataNascimentoBefore(String dataNascimento) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(dataNascimento,formatter);
         return conversorEntidadeParaDTO(pessoaRepository.findByDataNascimentoBefore(localDate));
     }
 
-    public List<PessoaDTO> findByIdade(int idade) {
+    public List<PessoaResponseResponseDTO> findByIdade(int idade) {
         return conversorEntidadeParaDTO(pessoaRepository.findByIdade(idade));
     }
 
-    public List<PessoaDTO> findAll() {
+    public List<PessoaResponseResponseDTO> findAll() {
         return conversorEntidadeParaDTO(pessoaRepository.findAll());
     }
 
@@ -91,9 +91,9 @@ public class PessoaService {
      * for ou foreach sem qualquer prejuízo.
      */
 
-    private List<PessoaDTO> conversorEntidadeParaDTO(List<Pessoa> pessoas) {
-        List<PessoaDTO> pessoasDTO = new ArrayList<>();
-        pessoasDTO = pessoas.stream().map(pessoa -> new PessoaDTO(pessoa.getId(),
+    private List<PessoaResponseResponseDTO> conversorEntidadeParaDTO(List<Pessoa> pessoas) {
+        List<PessoaResponseResponseDTO> pessoasDTO = new ArrayList<>();
+        pessoasDTO = pessoas.stream().map(pessoa -> new PessoaResponseResponseDTO(pessoa.getId(),
                 pessoa.getNome(),pessoa.getEstado(),pessoa.getDateCeated())).collect(Collectors.toList());
         return pessoasDTO;
     }

@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 
-import com.example.demo.form.PessoaFORM;
+import com.example.demo.dto.PessoaDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ public class Pessoa {
     /*
      * Lembrando de ajustar o construtor para iniciar o nosso novo parâmetro, já que ele nunca pode ser nulo
      */
-    public Pessoa(PessoaFORM pessoa) {
+    public Pessoa(PessoaDTO pessoa) {
         this.nome = pessoa.getNome().toUpperCase();
         this.dataNascimento = pessoa.getDataNascimento();
         this.estado = pessoa.getEstado().toUpperCase();

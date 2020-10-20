@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PessoaResponseResponseDTO;
 import com.example.demo.dto.PessoaDTO;
-import com.example.demo.form.PessoaFORM;
-import com.example.demo.model.Pessoa;
 import com.example.demo.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,14 +19,14 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     /*
-    * Essa notação indica que esse método vai ser chamado em requisições GET
-    */
+     * Essa notação indica que esse método vai ser chamado em requisições GET
+     */
     @GetMapping
-    public ResponseEntity<List<PessoaDTO>> listagemPessoas(@RequestParam(required = false)String nome,
-                                                           @RequestParam(required = false)String uf,
-                                                           @RequestParam(required = false)String depois,
-                                                           @RequestParam(required = false)String antes,
-                                                           @RequestParam(required = false)Integer idade) {
+    public ResponseEntity<List<PessoaResponseResponseDTO>> listagemPessoas(@RequestParam(required = false)String nome,
+                                                                           @RequestParam(required = false)String uf,
+                                                                           @RequestParam(required = false)String depois,
+                                                                           @RequestParam(required = false)String antes,
+                                                                           @RequestParam(required = false)Integer idade) {
         if(nome!=null) {
             return ResponseEntity.ok(pessoaService.findByNome(nome.toUpperCase()));
         } else if(uf!=null) {
@@ -48,15 +46,11 @@ public class PessoaController {
      * Essa notação indica que esse método vai ser chamado em requisições POST
      */
     @PostMapping
-    public ResponseEntity<Pessoa> salvar(@Valid @RequestBody PessoaFORM p,
-                                         UriComponentsBuilder uriComponentsBuilder) {
-        try {
-            Pessoa pessoa = pessoaService.save(p);
-            URI uri = uriComponentsBuilder.path("/pessoa/{id}").buildAndExpand(pessoa.getId()).toUri();
-            return ResponseEntity.created(uri).body(pessoa);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<PessoaResponseResponseDTO> salvar(@Valid @RequestBody PessoaDTO p,
+                                                            UriComponentsBuilder uriComponentsBuilder) {
+        PessoaResponseResponseDTO pessoa = pessoaService.save(p);
+        URI uri = uriComponentsBuilder.path("/pessoa/{id}").buildAndExpand(pessoa.getId()).toUri();
+        return ResponseEntity.created(uri).body(pessoa);
     }
 
     /*
@@ -69,14 +63,10 @@ public class PessoaController {
      * recebe no corpo da requisição, por isso Request Body, um objeto json do tipo Pessoa
      */
     @PutMapping("{id}")
-    public ResponseEntity<Pessoa> atualizar(@PathVariable Long id,
-                                            @Valid @RequestBody PessoaFORM p) {
-        try {
-            Pessoa pessoa = pessoaService.update(id, p);
-            return ResponseEntity.ok(pessoa);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<PessoaResponseResponseDTO> atualizar(@PathVariable Long id,
+                                                               @Valid @RequestBody PessoaDTO p) {
+        PessoaResponseResponseDTO pessoa = pessoaService.update(id, p);
+        return ResponseEntity.ok(pessoa);
     }
 
     /*
@@ -84,11 +74,7 @@ public class PessoaController {
      */
     @DeleteMapping("{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        try {
-            pessoaService.delete(id);
-            return ResponseEntity.ok().build();
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        pessoaService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
